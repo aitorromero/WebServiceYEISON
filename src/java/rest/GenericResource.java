@@ -5,7 +5,7 @@
  */
 package rest;
 
-import bd.Cliente;
+import bd.Bus;
 import bd.Conexion;
 import com.google.gson.Gson;
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 /**
  * REST Web Service
  *
- * @author Lluis_2
+ * @author EL PAPITO
  */
 @Path("generic")
 public class GenericResource {
@@ -54,9 +54,9 @@ public class GenericResource {
     {
         
         Conexion conexion = new Conexion();
-        List<Cliente> lista = null;
+        List<Bus> lista = null;
         try {
-            lista = conexion.obtenerClientes();
+            lista = conexion.obtenerBuses();
             
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,55 +72,55 @@ public class GenericResource {
      * PUT method for updating or creating an instance of GenericResource
      * @param content representation for the resource
      */
-    @PUT
+    /*@PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarCliente (String cli) {
+    public boolean insertarBus (String cli) {
          Conexion conexion = new Conexion();
          Gson gson = new Gson();
-         Cliente cliente;
-         cliente = gson.fromJson(cli, Cliente.class);
+         Bus cliente;
+         cliente = gson.fromJson(cli, Bus.class);
          boolean result = true;
         try {
           
-            conexion.actualizarCliente(cliente);
+            conexion.actualizarBus(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;             
         }
         return result;
-    }
+    }*/
      
     @GET
      @Path("{id}")
      @Produces(MediaType.APPLICATION_JSON)
-     public String mostrarCliente(@PathParam("id") int id)
+     public String mostrarBus(@PathParam("id") int id)
      {
-         Cliente cli = null;
+         Bus bus = null;
           Conexion conexion = new Conexion();
          try
          {
-             cli = conexion.obtenerCliente(id);
+             bus = conexion.obtenerBus(id);
          }
          catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
          }
          Gson gson = new Gson();
          
-         return gson.toJson(cli);
+         return gson.toJson(bus);
      }
      
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-     public boolean actualizarCliente(String cli)
+     public boolean actualizarBus(String cli)
      {
           Conexion conexion = new Conexion();
          Gson gson = new Gson();
-         Cliente cliente;
-         cliente = gson.fromJson(cli, Cliente.class);
+         Bus cliente;
+         cliente = gson.fromJson(cli, Bus.class);
          boolean result = true;
         try {
           
-            conexion.insertarCliente(cliente);
+            conexion.insertarBus(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
@@ -135,7 +135,7 @@ public class GenericResource {
 @Path("/delete/{id}")
  
   
-     public boolean eliminarCliente( @PathParam("id")int id)
+     public boolean eliminarBus( @PathParam("id")int id)
      {
           Conexion conexion = new Conexion();
           boolean result = true;

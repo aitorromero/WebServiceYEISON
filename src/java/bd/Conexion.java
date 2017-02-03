@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bd;
 
 import java.sql.Connection;
@@ -20,118 +15,100 @@ import java.util.logging.Logger;
  * @author Lluis_2
  */
 public class Conexion {
+
     Connection connection;
-    
-    public Conexion()
-    {
+
+    public Conexion() {
         try {
-                Class.forName("oracle.jdbc.driver.OracleDriver");
-                connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "PROFEA1","1234");
-               // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            connection = DriverManager.getConnection("jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "AITOR_ROMERO_CONNECTION", "aitor13aaa");
+            // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-}
+
+    }
 
     public Connection getConnection() {
         return connection;
     }
-    
-    
-        public void finalizarConexion() throws SQLException
-        {
-            connection.close();
+
+    public void finalizarConexion() throws SQLException {
+        connection.close();
+    }
+
+    public boolean insertarBus(Bus bus) throws SQLException {
+        String sql = "INSERT INTO Otobuses (id_bus, passwd) VALUES (?, ?)";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setString(1, bus.getIdBus()); //stmt.setString(1, cli.getNombre);
+        stmt.setString(2, bus.getPass());
+        int res = stmt.executeUpdate();
+        finalizarConexion();
+
+        return (res == 1);
+    }
+
+    public List<Bus> obtenerBuses() throws SQLException {
+        ResultSet rset;
+        List<Bus> lista = new ArrayList();
+        String sql = "SELECT id_bus, passwd FROM Otobuses";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            lista.add(new Bus(rset.getString("id_bus"), rset.getString("passwd")));
+
         }
-  
-        public  boolean insertarCliente(Cliente cli) throws SQLException
-{
-       String sql = "INSERT INTO Cliente (Nombre, Telefono) VALUES (?, ?)";
-       PreparedStatement stmt = connection.prepareStatement(sql);
-       stmt.setString(1, cli.getNombre()); //stmt.setString(1, cli.getNombre);
-       stmt.setInt(2, cli.getTelefono());
-       int res = stmt.executeUpdate();
-       finalizarConexion();
-           
- 
-      return (res == 1);
-}
-
-    
- 
-public List<Cliente> obtenerClientes() throws SQLException
-        
-{
-      ResultSet rset;
-      List<Cliente> lista = new ArrayList();
-      String sql = "SELECT IdCliente, Nombre, Telefono FROM Cliente";
-      PreparedStatement stmt = getConnection().prepareStatement(sql);
-      rset = stmt.executeQuery();
-      while (rset.next())
-      {
-          lista.add(new Cliente(rset.getInt("IdCliente"), rset.getString("Nombre"), rset.getInt("Telefono")));
-          
-      }
-      finalizarConexion();
-      return lista;
-}
- 
-    public Cliente obtenerCliente (int id) throws SQLException
-    {
-        Cliente cli = null;
-        
-      ResultSet rset;
-      
-      String sql = "SELECT IdCliente, Nombre, Telefono FROM Cliente WHERE idCliente = ?";
-      PreparedStatement stmt = getConnection().prepareStatement(sql);
-      stmt.setInt(1, id);
-      rset = stmt.executeQuery();
-      while (rset.next())
-      {
-          cli = new Cliente(rset.getInt("IdCliente"), rset.getString("Nombre"), rset.getInt("Telefono"));
-          
-      }
-      finalizarConexion();
-      return cli;
-        
-        
+        finalizarConexion();
+        return lista;
     }
-    
-    public boolean actualizarCliente(Cliente cli) throws SQLException
-    {
+
+    public Bus obtenerBus(int id_bus) throws SQLException {
+        Bus bus = null;
+
+        ResultSet rset;
+
+        String sql = "SELECT id_bus, passwd FROM Otobuses WHERE id_bus = ?";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setInt(1, id_bus);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            bus = new Bus(rset.getString("id_bus"), rset.getString("passwd"));
+
+        }
+        finalizarConexion();
+        return bus;
+
+    }
+
+    /*public boolean actualizarCliente(Bus cli) throws SQLException {
         boolean result;
-          String sql = "UPDATE cliente SET nombre = ?, telefono = ? WHERE idcliente = ?";
-       PreparedStatement stmt = connection.prepareStatement(sql);
-       stmt.setString(1, cli.getNombre()); //stmt.setString(1, cli.getNombre);
-       stmt.setInt(2, cli.getTelefono());
-       stmt.setInt(3, cli.getIdCliente());
-       
-       int res = stmt.executeUpdate();
-       if (res==0)  
-          result = insertarCliente(cli);
-       else
-           result = true;
-          
- 
-      return (result);
-    }
- 
-     
-  public boolean eliminarCliente(int id) throws SQLException
-    {
-       
-       String sql = "DELETE FROM cliente WHERE idcliente = ?";
-       PreparedStatement stmt = connection.prepareStatement(sql);
-       stmt.setInt(1, id);
-       
-       int res = stmt.executeUpdate();
-       
-      return (res==1);
-    }
-     
+        String sql = "UPDATE Otobuses SET id_bus = ?, passwd = ? WHERE idcliente = ?";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setString(1, cli.getNombre()); //stmt.setString(1, cli.getNombre);
+        stmt.setInt(2, cli.getTelefono());
+        stmt.setInt(3, cli.getIdCliente());
 
-        
-    
+        int res = stmt.executeUpdate();
+        if (res == 0) {
+            result = insertarCliente(cli);
+        } else {
+            result = true;
+        }
+
+        return (result);
+    }*/
+
+    public boolean eliminarCliente(int id_bus) throws SQLException {
+
+        String sql = "DELETE FROM Otobuses WHERE id_bus = ?";
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setInt(1, id_bus);
+
+        int res = stmt.executeUpdate();
+
+        return (res == 1);
+    }
+
 }
