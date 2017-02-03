@@ -10,10 +10,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Lluis_2
- */
+/*
+    Post insert
+    Put insert-Update
+
+    GET X3  AUTOBUSES
+            TODAS LAS POSICIONES DE UN BUS
+            ULTIMA POSICION DE UN BUS---------
+    PUT     POSICIONES-------
+*/
 public class Conexion {
 
     Connection connection;
@@ -38,33 +43,36 @@ public class Conexion {
     public void finalizarConexion() throws SQLException {
         connection.close();
     }
-
-    public boolean insertarBus(Bus bus) throws SQLException {
-        String sql = "INSERT INTO Otobuses (id_bus, passwd) VALUES (?, ?)";
+    
+    /*FUNCIONA, CREO*/
+    public boolean insertarPosicion(Localizacion loc) throws SQLException {
+        String sql = "INSERT INTO Posiciones (id_bus, altitud, latitud, fecha) VALUES (?, ?, ?, ?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, bus.getIdBus()); //stmt.setString(1, cli.getNombre);
-        stmt.setString(2, bus.getPass());
+        stmt.setString(1, loc.getMatricula()); //stmt.setString(1, cli.getNombre);
+        stmt.setFloat(2, loc.getAltitud());
+        stmt.setFloat(3, loc.getLatitud());
+        stmt.setString(4, loc.getFecha());
         int res = stmt.executeUpdate();
         finalizarConexion();
 
         return (res == 1);
     }
 
-    public List<Bus> obtenerBuses() throws SQLException {
+    public List<Localizacion> obtenerPosiciones() throws SQLException {
         ResultSet rset;
-        List<Bus> lista = new ArrayList();
-        String sql = "SELECT id_bus, passwd FROM Otobuses";
+        List<Localizacion> lista = new ArrayList();
+        String sql = "SELECT altitud, latitud, fecha FROM Posiciones WHERE id_bus = ?";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Bus(rset.getString("id_bus"), rset.getString("passwd")));
+            lista.add(new Localizacion(rset.getString("id_bus"), rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("fecha")));
 
         }
         finalizarConexion();
         return lista;
     }
 
-    public Bus obtenerBus(int id_bus) throws SQLException {
+    public Bus obtenerBusPor(int id_bus) throws SQLException {
         Bus bus = null;
 
         ResultSet rset;
@@ -79,6 +87,25 @@ public class Conexion {
         }
         finalizarConexion();
         return bus;
+
+    }
+    
+    /*FUNCIONA, CREO*/
+        public Localizacion obtenerUltimaPosicion(int id_bus) throws SQLException {
+        Localizacion loc = null;
+
+        ResultSet rset;
+
+        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE id_bus = ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setInt(1, id_bus);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            loc = new Localizacion(rset.getFloat("latitud"), rset.getFloat("altitud"), rset.getString("fecha"), rset.getString("id_bus"));
+
+        }
+        finalizarConexion();
+        return loc;
 
     }
 
@@ -100,7 +127,7 @@ public class Conexion {
         return (result);
     }*/
 
-    public boolean eliminarCliente(int id_bus) throws SQLException {
+    /*public boolean eliminarCliente(int id_bus) throws SQLException {
 
         String sql = "DELETE FROM Otobuses WHERE id_bus = ?";
         PreparedStatement stmt = connection.prepareStatement(sql);
@@ -109,6 +136,6 @@ public class Conexion {
         int res = stmt.executeUpdate();
 
         return (res == 1);
-    }
+    }*/
 
 }

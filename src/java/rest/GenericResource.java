@@ -4,6 +4,15 @@
  * and open the template in the editor.
  */
 package rest;
+/*
+    Post insert
+    Put insert-Update
+
+    GET X3  AUTOBUSES
+            TODAS LAS POSICIONES DE UN BUS
+            ULTIMA POSICION DE UN BUS
+    PUT     POSICIONES
+*/
 
 import bd.Bus;
 import bd.Conexion;
