@@ -15,9 +15,10 @@ import java.util.logging.Logger;
     Put insert-Update
 
     GET X3  AUTOBUSES
-            TODAS LAS POSICIONES DE UN BUS
-            ULTIMA POSICION DE UN BUS---------
-    PUT     POSICIONES-------
+            OBTENER 1 BUS------------(obtenerBusPor)--
+            TODAS LAS POSICIONES DE UN BUS---------(obtenerPosiciones)
+            ULTIMA POSICION DE UN BUS---------(obtenerUltimaPosicion)--
+    PUT     POSICIONES------- (insertarPosicion)
 */
 public class Conexion {
 
@@ -65,7 +66,7 @@ public class Conexion {
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getString("id_bus"), rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("fecha")));
+            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("matricula"), rset.getString("fecha")));
 
         }
         finalizarConexion();

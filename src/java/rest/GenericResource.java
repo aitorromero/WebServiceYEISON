@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package rest;
+
 /*
     Post insert
     Put insert-Update
@@ -12,10 +13,11 @@ package rest;
             TODAS LAS POSICIONES DE UN BUS
             ULTIMA POSICION DE UN BUS
     PUT     POSICIONES
-*/
+ */
 
 import bd.Bus;
 import bd.Conexion;
+import bd.Localizacion;
 import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.List;
@@ -44,8 +46,6 @@ public class GenericResource {
 
     @Context
     private UriInfo context;
-  
-    
 
     /**
      * Creates a new instance of GenericResource
@@ -55,30 +55,29 @@ public class GenericResource {
 
     /**
      * Retrieves representation of an instance of rest.GenericResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarClientes ()
-    {
-        
+    public String listarClientes() {
+
         Conexion conexion = new Conexion();
         List<Bus> lista = null;
         try {
             lista = conexion.obtenerBuses();
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         Gson gson = new Gson();
-        
+
         return gson.toJson(lista);
     }
-         
-       
 
     /**
      * PUT method for updating or creating an instance of GenericResource
+     *
      * @param content representation for the resource
      */
     /*@PUT
@@ -98,65 +97,74 @@ public class GenericResource {
         }
         return result;
     }*/
-     
+ /*ESTE SI*/
     @GET
-     @Path("{id}")
-     @Produces(MediaType.APPLICATION_JSON)
-     public String mostrarBus(@PathParam("id") int id)
-     {
-         Bus bus = null;
-          Conexion conexion = new Conexion();
-         try
-         {
-             bus = conexion.obtenerBus(id);
-         }
-         catch (SQLException ex) {
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String mostrarBus(@PathParam("id") int id) {
+        Bus bus = null;
+        Conexion conexion = new Conexion();
+        try {
+            bus = conexion.obtenerBusPor(id);
+        } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         Gson gson = new Gson();
-         
-         return gson.toJson(bus);
-     }
-     
+        }
+        Gson gson = new Gson();
+
+        return gson.toJson(bus);
+    }
+
+    /*ESTE SI*/
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String obtenerUltimaPosicion(@PathParam("id") int id) {
+        Localizacion loc = null;
+        Conexion conexion = new Conexion();
+        try {
+            loc = conexion.obtenerUltimaPosicion(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Gson gson = new Gson();
+
+        return gson.toJson(loc);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-     public boolean actualizarBus(String cli)
-     {
-          Conexion conexion = new Conexion();
-         Gson gson = new Gson();
-         Bus cliente;
-         cliente = gson.fromJson(cli, Bus.class);
-         boolean result = true;
+    public boolean actualizarBus(String cli) {
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Bus cliente;
+        cliente = gson.fromJson(cli, Bus.class);
+        boolean result = true;
         try {
-          
+
             conexion.insertarBus(cliente);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
-            
-            
-            
+
         }
         return result;
-     }
-     
-@DELETE
-@Path("/delete/{id}")
- 
-  
-     public boolean eliminarBus( @PathParam("id")int id)
-     {
-          Conexion conexion = new Conexion();
-          boolean result = true;
-            
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+
+    public boolean eliminarBus(@PathParam("id") int id) {
+        Conexion conexion = new Conexion();
+        boolean result = true;
+
         try {
-          
+
             conexion.eliminarCliente(id);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
             result = false;
-            
+
         }
         return result;
-     }
+    }
 }
