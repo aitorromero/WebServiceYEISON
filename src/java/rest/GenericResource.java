@@ -14,7 +14,6 @@ package rest;
             ULTIMA POSICION DE UN BUS
     PUT     POSICIONES
  */
-
 import bd.Bus;
 import bd.Conexion;
 import bd.Localizacion;
@@ -58,9 +57,10 @@ public class GenericResource {
      *
      * @return an instance of java.lang.String
      */
+    /*IGUAL*/
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String listarClientes() {
+    public String listarBuses() {
 
         Conexion conexion = new Conexion();
         List<Bus> lista = null;
@@ -98,6 +98,7 @@ public class GenericResource {
         return result;
     }*/
  /*ESTE SI*/
+ /*IGUAL*/
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -114,7 +115,7 @@ public class GenericResource {
         return gson.toJson(bus);
     }
 
-    /*ESTE SI*/
+    /*ESTE SI*//*PREGUNTAR*/
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +131,7 @@ public class GenericResource {
 
         return gson.toJson(loc);
     }
-
+    /*DUDAS SOBRE COMO HACERLO*/
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public boolean actualizarBus(String cli) {
@@ -150,21 +151,4 @@ public class GenericResource {
         return result;
     }
 
-    @DELETE
-    @Path("/delete/{id}")
-
-    public boolean eliminarBus(@PathParam("id") int id) {
-        Conexion conexion = new Conexion();
-        boolean result = true;
-
-        try {
-
-            conexion.eliminarCliente(id);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-
-        }
-        return result;
-    }
 }

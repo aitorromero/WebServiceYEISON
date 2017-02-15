@@ -2,36 +2,48 @@ package bd;
 
 public class Localizacion {
 
-    private float latitud;
-    private float altitud;
+    private double latitud;
+    private double altitud;
     private String fecha;
     private String matricula;
 
-    public Localizacion(float latitud, float altitud, String fecha, String matricula) {
+    public Localizacion(double latitud, double altitud, String fecha, String matricula) {
         this.altitud = altitud;
         this.latitud = latitud;
         this.matricula = matricula;
         this.fecha = fecha;
     }
     
-    public Localizacion(){
-        
+    public String getMatricula() {
+        return matricula;
     }
 
-    public float getLatitud() {
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public double getLatitud() {
         return latitud;
     }
 
-    public float getAltitud() {
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getAltitud() {
         return altitud;
     }
 
-    public String getFecha() {
+    public void setAltitud(double altitud) {
+        this.altitud = altitud;
+    }
+
+    public String getfecha() {
         return fecha;
     }
 
-    public String getMatricula() {
-        return matricula;
+    public void setfecha(String fecha) {
+        this.fecha = fecha;
     }
     
 

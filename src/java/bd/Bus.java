@@ -24,16 +24,25 @@ public class Bus {
         this.pass = pass;
         this.id_bus = id_bus;
     }
-
-    public Bus() {
+    
+    public Bus(){
+        
     }
 
     public String getIdBus() {
         return id_bus;
     }
 
-    public String getPass() {
+    public void setIdBus(String id_bus) {
+        this.id_bus = id_bus;
+    }
+
+    public String getPassword() {
         return pass;
+    }
+
+    public void setPassword(String pass) {
+        this.pass = pass;
     }
     
 }
