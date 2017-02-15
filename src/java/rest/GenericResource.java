@@ -58,22 +58,22 @@ public class GenericResource {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public String listarClientes() {
-
-        Conexion conexion = new Conexion();
-        List<Bus> lista = null;
-        try {
-            lista = conexion.obtenerBuses();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Gson gson = new Gson();
-
-        return gson.toJson(lista);
-    }
+//    @GET
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public String listarClientes() {
+//
+//        Conexion conexion = new Conexion();
+//        List<Bus> lista = null;
+//        try {
+//            lista = conexion.obtenerBuses();
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        Gson gson = new Gson();
+//
+//        return gson.toJson(lista);
+//    }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
@@ -98,21 +98,21 @@ public class GenericResource {
         return result;
     }*/
  /*ESTE SI*/
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String mostrarBus(@PathParam("id") int id) {
-        Bus bus = null;
-        Conexion conexion = new Conexion();
-        try {
-            bus = conexion.obtenerBusPor(id);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Gson gson = new Gson();
-
-        return gson.toJson(bus);
-    }
+//    @GET
+//    @Path("{id}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public String mostrarBus(@PathParam("id") int id) {
+//        Bus bus = null;
+//        Conexion conexion = new Conexion();
+//        try {
+//            bus = conexion.obtenerBusPor(id);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        Gson gson = new Gson();
+//
+//        return gson.toJson(bus);
+//    }
 
     /*ESTE SI*/
     @GET
@@ -131,40 +131,40 @@ public class GenericResource {
         return gson.toJson(loc);
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public boolean actualizarBus(String cli) {
-        Conexion conexion = new Conexion();
-        Gson gson = new Gson();
-        Bus cliente;
-        cliente = gson.fromJson(cli, Bus.class);
-        boolean result = true;
-        try {
-
-            conexion.insertarBus(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-
-        }
-        return result;
-    }
-
-    @DELETE
-    @Path("/delete/{id}")
-
-    public boolean eliminarBus(@PathParam("id") int id) {
-        Conexion conexion = new Conexion();
-        boolean result = true;
-
-        try {
-
-            conexion.eliminarCliente(id);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-
-        }
-        return result;
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public boolean actualizarBus(String cli) {
+//        Conexion conexion = new Conexion();
+//        Gson gson = new Gson();
+//        Bus cliente;
+//        cliente = gson.fromJson(cli, Bus.class);
+//        boolean result = true;
+//        try {
+//
+//            conexion.insertarBus(cliente);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+//            result = false;
+//
+//        }
+//        return result;
+//    }
+//
+//    @DELETE
+//    @Path("/delete/{id}")
+//
+//    public boolean eliminarBus(@PathParam("id") int id) {
+//        Conexion conexion = new Conexion();
+//        boolean result = true;
+//
+//        try {
+//
+//            conexion.eliminarCliente(id);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+//            result = false;
+//
+//        }
+//        return result;
+//    }
 }

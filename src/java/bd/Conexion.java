@@ -14,9 +14,10 @@ import java.util.logging.Logger;
     Post insert
     Put insert-Update
 
-    GET X3  AUTOBUSES
+    GET X3  TODOS AUTOBUSES--NO PRESCINDIBLE--
             OBTENER 1 BUS------------(obtenerBusPor)--
-            TODAS LAS POSICIONES DE UN BUS---------(obtenerPosiciones)
+            TODAS LAS POSICIONES DE UN BUS---------(obtenerPosiciones)--ORDENADAS FECHA
+                DESDE ID ENCUENTRA TODAS LAS POSICIONES DE UN BUS
             ULTIMA POSICION DE UN BUS---------(obtenerUltimaPosicion)--
     PUT     POSICIONES------- (insertarPosicion)
 */
@@ -58,40 +59,8 @@ public class Conexion {
 
         return (res == 1);
     }
-
-    public List<Localizacion> obtenerPosiciones() throws SQLException {
-        ResultSet rset;
-        List<Localizacion> lista = new ArrayList();
-        String sql = "SELECT altitud, latitud, fecha FROM Posiciones WHERE id_bus = ?";
-        PreparedStatement stmt = getConnection().prepareStatement(sql);
-        rset = stmt.executeQuery();
-        while (rset.next()) {
-            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("matricula"), rset.getString("fecha")));
-
-        }
-        finalizarConexion();
-        return lista;
-    }
-
-    public Bus obtenerBusPor(int id_bus) throws SQLException {
-        Bus bus = null;
-
-        ResultSet rset;
-
-        String sql = "SELECT id_bus, passwd FROM Otobuses WHERE id_bus = ?";
-        PreparedStatement stmt = getConnection().prepareStatement(sql);
-        stmt.setInt(1, id_bus);
-        rset = stmt.executeQuery();
-        while (rset.next()) {
-            bus = new Bus(rset.getString("id_bus"), rset.getString("passwd"));
-
-        }
-        finalizarConexion();
-        return bus;
-
-    }
     
-    /*FUNCIONA, CREO*/
+        /*FUNCIONA, CREO*/
         public Localizacion obtenerUltimaPosicion(int id_bus) throws SQLException {
         Localizacion loc = null;
 
@@ -109,6 +78,40 @@ public class Conexion {
         return loc;
 
     }
+
+    public List<Localizacion> obtenerPosiciones() throws SQLException {
+        ResultSet rset;
+        List<Localizacion> lista = new ArrayList();
+        String sql = "SELECT altitud, latitud, fecha FROM Posiciones WHERE id_bus = ? ORDER BY fecha DESC";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("matricula"), rset.getString("fecha")));
+
+        }
+        finalizarConexion();
+        return lista;
+    }
+
+//    public Bus obtenerBusPor(int id_bus) throws SQLException {
+//        Bus bus = null;
+//
+//        ResultSet rset;
+//
+//        String sql = "SELECT id_bus, passwd FROM Otobuses WHERE id_bus = ?";
+//        PreparedStatement stmt = getConnection().prepareStatement(sql);
+//        stmt.setInt(1, id_bus);
+//        rset = stmt.executeQuery();
+//        while (rset.next()) {
+//            bus = new Bus(rset.getString("id_bus"), rset.getString("passwd"));
+//
+//        }
+//        finalizarConexion();
+//        return bus;
+//
+//    }
+    
+
 
     /*public boolean actualizarCliente(Bus cli) throws SQLException {
         boolean result;
