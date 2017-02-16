@@ -14,7 +14,6 @@ package rest;
             ULTIMA POSICION DE UN BUS
     PUT     POSICIONES
  */
-
 import bd.Bus;
 import bd.Conexion;
 import bd.Localizacion;
@@ -58,22 +57,23 @@ public class GenericResource {
      *
      * @return an instance of java.lang.String
      */
-//    @GET
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String listarClientes() {
-//
-//        Conexion conexion = new Conexion();
-//        List<Bus> lista = null;
-//        try {
-//            lista = conexion.obtenerBuses();
-//
-//        } catch (SQLException ex) {
-//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        Gson gson = new Gson();
-//
-//        return gson.toJson(lista);
-//    }
+    /*IGUAL*/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listarBuses() {
+
+        Conexion conexion = new Conexion();
+        List<Bus> lista = null;
+        try {
+            lista = conexion.obtenerBuses();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Gson gson = new Gson();
+
+        return gson.toJson(lista);
+    }
 
     /**
      * PUT method for updating or creating an instance of GenericResource
@@ -98,25 +98,26 @@ public class GenericResource {
         return result;
     }*/
  /*ESTE SI*/
-//    @GET
-//    @Path("{id}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public String mostrarBus(@PathParam("id") int id) {
-//        Bus bus = null;
-//        Conexion conexion = new Conexion();
-//        try {
-//            bus = conexion.obtenerBusPor(id);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        Gson gson = new Gson();
-//
-//        return gson.toJson(bus);
-//    }
-
-    /*ESTE SI*/
+ /*IGUAL*/
     @GET
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String mostrarBus(@PathParam("id") int id) {
+        Bus bus = null;
+        Conexion conexion = new Conexion();
+        try {
+            bus = conexion.obtenerBusPor(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Gson gson = new Gson();
+
+        return gson.toJson(bus);
+    }
+
+    /*ESTE SI*//*PREGUNTAR*/
+    @GET
+    @Path("ultima/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String obtenerUltimaPosicion(@PathParam("id") int id) {
         Localizacion loc = null;
@@ -130,7 +131,7 @@ public class GenericResource {
 
         return gson.toJson(loc);
     }
-
+    /*DUDAS SOBRE COMO HACERLO*/
 //    @POST
 //    @Consumes(MediaType.APPLICATION_JSON)
 //    public boolean actualizarBus(String cli) {
@@ -149,22 +150,5 @@ public class GenericResource {
 //        }
 //        return result;
 //    }
-//
-//    @DELETE
-//    @Path("/delete/{id}")
-//
-//    public boolean eliminarBus(@PathParam("id") int id) {
-//        Conexion conexion = new Conexion();
-//        boolean result = true;
-//
-//        try {
-//
-//            conexion.eliminarCliente(id);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-//            result = false;
-//
-//        }
-//        return result;
-//    }
+
 }
