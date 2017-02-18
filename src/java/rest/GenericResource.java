@@ -117,7 +117,7 @@ public class GenericResource {
 
     /*ESTE SI*//*PREGUNTAR*/
     @GET
-    @Path("{id}")
+    @Path("ultima/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String obtenerUltimaPosicion(@PathParam("id") int id) {
         Localizacion loc = null;
@@ -132,23 +132,23 @@ public class GenericResource {
         return gson.toJson(loc);
     }
     /*DUDAS SOBRE COMO HACERLO*/
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public boolean actualizarBus(String cli) {
-        Conexion conexion = new Conexion();
-        Gson gson = new Gson();
-        Bus cliente;
-        cliente = gson.fromJson(cli, Bus.class);
-        boolean result = true;
-        try {
-
-            conexion.insertarBus(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;
-
-        }
-        return result;
-    }
+//    @POST
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public boolean actualizarBus(String cli) {
+//        Conexion conexion = new Conexion();
+//        Gson gson = new Gson();
+//        Bus cliente;
+//        cliente = gson.fromJson(cli, Bus.class);
+//        boolean result = true;
+//        try {
+//
+//            conexion.insertarBus(cliente);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+//            result = false;
+//
+//        }
+//        return result;
+//    }
 
 }
