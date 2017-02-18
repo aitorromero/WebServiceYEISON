@@ -19,6 +19,7 @@ import bd.Conexion;
 import bd.Localizacion;
 import com.google.gson.Gson;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,12 +53,12 @@ public class GenericResource {
     public GenericResource() {
     }
 
-    /**
-     * Retrieves representation of an instance of rest.GenericResource
-     *
-     * @return an instance of java.lang.String
-     */
     /*IGUAL*/
+    /**
+     * Metodo para mostrar la matricula y la contraseña de todos los buses
+     *
+     * @return
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listarBuses() {
@@ -75,30 +76,14 @@ public class GenericResource {
         return gson.toJson(lista);
     }
 
-    /**
-     * PUT method for updating or creating an instance of GenericResource
-     *
-     * @param content representation for the resource
-     */
-    /*@PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public boolean insertarBus (String cli) {
-         Conexion conexion = new Conexion();
-         Gson gson = new Gson();
-         Bus cliente;
-         cliente = gson.fromJson(cli, Bus.class);
-         boolean result = true;
-        try {
-          
-            conexion.actualizarBus(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-            result = false;             
-        }
-        return result;
-    }*/
- /*ESTE SI*/
+    /*ESTE SI*/
  /*IGUAL*/
+    /**
+     * Metodo para obtener la matricula y contraseña de un bus concreto
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -116,6 +101,12 @@ public class GenericResource {
     }
 
     /*ESTE SI*//*PREGUNTAR*/
+    /**
+     * Metodo para obtener la ultima posicion de un bus
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("ultima/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -131,24 +122,48 @@ public class GenericResource {
 
         return gson.toJson(loc);
     }
-    /*DUDAS SOBRE COMO HACERLO*/
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public boolean actualizarBus(String cli) {
-//        Conexion conexion = new Conexion();
-//        Gson gson = new Gson();
-//        Bus cliente;
-//        cliente = gson.fromJson(cli, Bus.class);
-//        boolean result = true;
-//        try {
-//
-//            conexion.insertarBus(cliente);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-//            result = false;
-//
-//        }
-//        return result;
-//    }
+
+    /**
+     * Metodo para mostrar las 5 ultimas posiciones de un solo bus
+     * @param id
+     * @return 
+     */
+    @GET
+    @Path("cincoUltimas/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String mostrarUbicacionAutobus(@PathParam("id") String id) {
+        List<Localizacion> loc = null;
+        Conexion conexion = new Conexion();
+        try {
+            loc = conexion.obtenerPosiciones(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Gson gson = new Gson();
+        return loc.isEmpty() ? gson.toJson(false) : gson.toJson(loc);
+    }
+
+    /**
+     * Metodo para insertar posiciones
+     * @param posicion
+     * @return
+     * @throws ParseException 
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public boolean insertarPosicion(String posicion) throws ParseException {
+        Conexion conexion = new Conexion();
+        Gson gson = new Gson();
+        Localizacion loc;
+        loc = gson.fromJson(posicion, Localizacion.class);
+        boolean result = true;
+        try {
+            conexion.insertarPosicion(loc);
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+            result = false;
+        }
+        return result;
+    }
 
 }

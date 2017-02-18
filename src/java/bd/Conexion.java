@@ -31,14 +31,21 @@ public class Conexion {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             //DESDE CLASE
-            //connection = DriverManager.getConnection(
-            //        "jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "AITOR_ROMERO_CONNECTION", "aitor13aaa");
-            //DESDE CASA
-            connection = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "AITOR_ROMERO_CONNECTION", "aitor13aaa");
+            try {
+                connection = DriverManager.getConnection(
+                        "jdbc:oracle:thin:@192.168.180.10:1521:INSLAFERRERI", "AITOR_ROMERO_CONNECTION", "aitor13aaa");
+            } catch (SQLException e1) {
+                try {
+                    //DESDE CASA
+                    connection = DriverManager.getConnection(
+                            "jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "AITOR_ROMERO_CONNECTION", "aitor13aaa");
+
+                } catch (SQLException e) {
+                    System.out.println(e);
+                }
+            }
+
             // connection = DriverManager.getConnection("jdbc:oracle:thin:@ieslaferreria.xtec.cat:8081:INSLAFERRERI", "PROFEA1","1234");
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,17 +69,18 @@ public class Conexion {
 
     /**
      * Metodo para insertar una nueva posicion a un bus
+     *
      * @param loc
      * @return
      * @throws SQLException
-     * @throws ParseException 
+     * @throws ParseException
      */
     public boolean insertarPosicion(Localizacion loc) throws SQLException, ParseException {
         String sql = "INSERT INTO Localizaciones (id_bus, altitud, latitud, fecha) VALUES (?, ?, ?, ?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
         String date;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         stmt.setString(1, loc.getMatricula()); //stmt.setString(1, cli.getNombre);
         stmt.setDouble(2, loc.getAltitud());
         stmt.setDouble(3, loc.getLatitud());
@@ -88,15 +96,17 @@ public class Conexion {
 
         return (res == 1);
     }
+
     /**
      * Metodo para obtener un listado con la matricula de todos los buses.
+     *
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public List<Bus> obtenerBuses() throws SQLException {
         ResultSet rset;
         List<Bus> lista = new ArrayList();
-        String sql = "SELECT matricula FROM Bus";
+        String sql = "SELECT * FROM Bus";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
@@ -106,12 +116,13 @@ public class Conexion {
         finalizarConexion();
         return lista;
     }
-    
+
     /**
      * Metodo para obtener un bus a partir de su matricula(id_bus)
+     *
      * @param id_bus
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public Bus obtenerBusPor(int id_bus) throws SQLException {
         Bus bus = null;
@@ -130,17 +141,33 @@ public class Conexion {
         return bus;
 
     }
+
     /**
-     * Metodo para obtener las 5 ultimas posiciones de un solo bus.
-     * Este metodo se usara para el mapa.
+     * Metodo para obtener las 5 ultimas posiciones de un solo bus. Este metodo
+     * se usara para el mapa.
+     *
      * @param id_bus
      * @return
-     * @throws SQLException 
+     * @throws SQLException
      */
     public List<Localizacion> obtenerPosiciones(String id_bus) throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList();
         String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("id_bus"), rset.getString("fecha")));
+
+        }
+        finalizarConexion();
+        return lista;
+    }
+
+    public List<Localizacion> obtenerTodasPosiciones(String id_bus) throws SQLException {
+        ResultSet rset;
+        List<Localizacion> lista = new ArrayList();
+        String sql = "SELECT * FROM Localizacion WHERE matricula = ?";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
@@ -157,7 +184,7 @@ public class Conexion {
 
         ResultSet rset;
 
-        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE id_bus = ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
+        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE matricula = ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setInt(1, id_bus);
         rset = stmt.executeQuery();
