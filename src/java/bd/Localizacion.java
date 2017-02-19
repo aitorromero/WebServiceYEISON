@@ -26,7 +26,7 @@ public class Localizacion {
         return latitud;
     }
 
-    public void setLatitud(double latitud) {
+    public void setLatitud(float latitud) {
         this.latitud = latitud;
     }
 
@@ -34,7 +34,7 @@ public class Localizacion {
         return altitud;
     }
 
-    public void setAltitud(double altitud) {
+    public void setAltitud(float altitud) {
         this.altitud = altitud;
     }
 

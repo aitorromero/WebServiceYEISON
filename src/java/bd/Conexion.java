@@ -152,11 +152,13 @@ public class Conexion {
     public List<Localizacion> obtenerPosiciones(String id_bus) throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList();
-        String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
+        String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula = ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
+        
         PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("id_bus"), rset.getString("fecha")));
+            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula")));
 
         }
         finalizarConexion();
@@ -168,24 +170,24 @@ public class Conexion {
         List<Localizacion> lista = new ArrayList();
         String sql = "SELECT * FROM Localizacion WHERE matricula LIKE ?";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getFloat("altitud"), rset.getFloat("latitud"), rset.getString("id_bus"), rset.getString("fecha")));
+            lista.add(new Localizacion(rset.getFloat("latitud"), rset.getFloat("altitud"), rset.getString("fecha"), rset.getString("matricula")));
 
         }
         finalizarConexion();
         return lista;
     }
 
-    /*PREGUNTAR*/
-    public Localizacion obtenerUltimaPosicion(int id_bus) throws SQLException {
+    public Localizacion obtenerUltimaPosicion(String id_bus) throws SQLException {
         Localizacion loc = null;
 
         ResultSet rset;
 
         String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
-        stmt.setInt(1, id_bus);
+        stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
             loc = new Localizacion(rset.getFloat("latitud"), rset.getFloat("altitud"), rset.getString("fecha"), rset.getString("id_bus"));

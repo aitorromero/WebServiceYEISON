@@ -110,7 +110,7 @@ public class GenericResource {
     @GET
     @Path("ultima/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String obtenerUltimaPosicion(@PathParam("id") int id) {
+    public String obtenerUltimaPosicion(@PathParam("id") String id) {
         Localizacion loc = null;
         Conexion conexion = new Conexion();
         try {
@@ -140,7 +140,7 @@ public class GenericResource {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         Gson gson = new Gson();
-        return loc.isEmpty() ? gson.toJson(false) : gson.toJson(loc);
+        return gson.toJson(loc);
     }
 
     /**
