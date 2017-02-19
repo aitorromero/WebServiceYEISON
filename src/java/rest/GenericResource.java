@@ -124,27 +124,6 @@ public class GenericResource {
     }
 
     /**
-     * Metodo para obtener la ultima posicion de cada uno de los buses
-     *
-     * @return
-     */
-    @GET
-    @Path("ultima/posiciones")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String mostrarUltimasPosiciones() {
-        List<Localizacion> lista = null;
-        Conexion conexion = new Conexion();
-        try {
-            lista = conexion.obtenerUltimasLocalizaciones();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Gson gson = new Gson();
-        return lista.isEmpty() ? gson.toJson(false) : gson.toJson(lista);
-    }
-
-    /**
      * Metodo para mostrar las 5 ultimas posiciones de un solo bus
      *
      * @param id
@@ -165,7 +144,11 @@ public class GenericResource {
         Gson gson = new Gson();
         return gson.toJson(loc);
     }
-
+    
+    /**
+     * Metodo para obtener la ultima localizacion de todos los buses
+     * @return 
+     */
     @GET
     @Path("cincoUltimasPosiciones")
     @Produces(MediaType.APPLICATION_JSON)

@@ -142,29 +142,11 @@ public class Conexion {
     }
 
     /**
-     * Metodo para obtener las 5 ultimas posiciones de un solo bus.
-     *
+     * Metodo para obtener todas las posiciones de un bus pasado por parametro
      * @param id_bus
      * @return
-     * @throws SQLException
+     * @throws SQLException 
      */
-    //ALGO FALLA
-    public List<Localizacion> obtenerPosiciones(String id_bus) throws SQLException {
-        ResultSet rset;
-        List<Localizacion> lista = new ArrayList<>();
-        String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula = ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
-
-        PreparedStatement stmt = getConnection().prepareStatement(sql);
-        stmt.setString(1, id_bus);
-        rset = stmt.executeQuery();
-        while (rset.next()) {
-            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula")));
-
-        }
-        finalizarConexion();
-        return lista;
-    }
-
     public List<Localizacion> obtenerTodasPosiciones(String id_bus) throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList();
@@ -180,6 +162,12 @@ public class Conexion {
         return lista;
     }
 
+    /**
+     * Metodo para obtener la ultima posicion de un bus pasado por parametro
+     * @param id_bus
+     * @return
+     * @throws SQLException 
+     */
     public Localizacion obtenerUltimaPosicion(String id_bus) throws SQLException {
         Localizacion loc = null;
 
@@ -198,6 +186,12 @@ public class Conexion {
 
     }
 
+    /**
+     * Metodo para obtener las 5 ultimas posiciones de un bus pasado por parametro
+     * @param id
+     * @return
+     * @throws SQLException 
+     */
     public List<Localizacion> obtenerLocalizacionesBuses(String id) throws SQLException {
         List<Localizacion> loc = new ArrayList<>();
         ResultSet rset;
@@ -213,6 +207,11 @@ public class Conexion {
         return loc;
     }
 
+    /**
+     * Metodo para obtener la ultima localizacion de todos los buses
+     * @return
+     * @throws SQLException 
+     */
     public List<Localizacion> obtenerUltimasLocalizaciones() throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList<>();
