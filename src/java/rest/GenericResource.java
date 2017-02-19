@@ -125,22 +125,23 @@ public class GenericResource {
 
     /**
      * Metodo para obtener la ultima posicion de cada uno de los buses
-     * @return 
+     *
+     * @return
      */
     @GET
     @Path("ultima/posiciones")
     @Produces(MediaType.APPLICATION_JSON)
     public String mostrarUltimasPosiciones() {
-        List<Localizacion> auto = null;
+        List<Localizacion> lista = null;
         Conexion conexion = new Conexion();
         try {
-            auto = conexion.obtenerUltimasPosiciones();
+            lista = conexion.obtenerUltimasLocalizaciones();
 
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         Gson gson = new Gson();
-        return auto.isEmpty() ? gson.toJson(false) : gson.toJson(auto);
+        return lista.isEmpty() ? gson.toJson(false) : gson.toJson(lista);
     }
 
     /**
@@ -153,16 +154,31 @@ public class GenericResource {
     @GET
     @Path("cincoUltimas/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String mostrarUbicacionAutobus(@PathParam("id") String id) {
+    public String mostrarLocalizacionAutobus(@PathParam("id") String id) {
         List<Localizacion> loc = null;
         Conexion conexion = new Conexion();
         try {
-            loc = conexion.obtenerPosiciones(id);
+            loc = conexion.obtenerLocalizacionesBuses(id);
         } catch (SQLException ex) {
             Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         Gson gson = new Gson();
         return gson.toJson(loc);
+    }
+
+    @GET
+    @Path("cincoUltimasPosiciones")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String obtenerUltimasLocalizaciones() {
+        List<Localizacion> ubi = null;
+        Conexion conexion = new Conexion();
+        try {
+            ubi = conexion.obtenerUltimasLocalizaciones();
+        } catch (SQLException ex) {
+            Logger.getLogger(GenericResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Gson gson = new Gson();
+        return ubi.isEmpty() ? gson.toJson(false) : gson.toJson(ubi);
     }
 
     /**

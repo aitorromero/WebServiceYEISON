@@ -80,14 +80,14 @@ public class Conexion {
         PreparedStatement stmt = connection.prepareStatement(sql);
         String date;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mi:ss");
         stmt.setString(1, loc.getMatricula()); //stmt.setString(1, cli.getNombre);
         stmt.setDouble(2, loc.getAltitud());
         stmt.setDouble(3, loc.getLatitud());
         stmt.setString(4, loc.getfecha());
 
         date = loc.getfecha();
-        Date data = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+        Date data = new SimpleDateFormat("yyyy-MM-dd HH:mi:ss").parse(date);
         java.sql.Date sDate = convertUtilToSql(data);
         stmt.setDate(4, sDate);
 
@@ -173,7 +173,7 @@ public class Conexion {
         stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getFloat("latitud"), rset.getFloat("altitud"), rset.getString("fecha"), rset.getString("matricula")));
+            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula")));
 
         }
         finalizarConexion();
@@ -190,7 +190,7 @@ public class Conexion {
         stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            loc = new Localizacion(rset.getFloat("latitud"), rset.getFloat("altitud"), rset.getString("fecha"), rset.getString("id_bus"));
+            loc = new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("id_bus"));
 
         }
         finalizarConexion();
@@ -198,11 +198,26 @@ public class Conexion {
 
     }
 
-    public List<Localizacion> obtenerUltimasPosiciones() throws SQLException {
+    public List<Localizacion> obtenerLocalizacionesBuses(String id) throws SQLException {
+        List<Localizacion> loc = new ArrayList<>();
+        ResultSet rset;
+        String sql = "SELECT * FROM (SELECT * FROM UBICACION WHERE matricula LIKE ? ORDER BY data DESC) WHERE ROWNUM <=5";
+
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setString(1, id);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            loc.add(new Localizacion(rset.getDouble("altitud"), rset.getDouble("latitud"), rset.getString("fecha"), rset.getString("matricula")));
+        }
+        finalizarConexion();
+        return loc;
+    }
+
+    public List<Localizacion> obtenerUltimasLocalizaciones() throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList<>();
         String sql = "SELECT * FROM Localizacion WHERE (matricula, fecha) IN (SELECT matricula, MAX(fecha) FROM Localizacion GROUP BY matricula)";
-        
+
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
@@ -212,5 +227,5 @@ public class Conexion {
         return lista;
 
     }
- 
+
 }
