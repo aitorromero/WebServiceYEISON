@@ -173,12 +173,12 @@ public class Conexion {
 
         ResultSet rset;
 
-        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
+        String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            loc = new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("id_bus"));
+            loc = new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("FECHA"), rset.getString("MATRICULA"));
 
         }
         finalizarConexion();
@@ -195,13 +195,13 @@ public class Conexion {
     public List<Localizacion> obtenerLocalizacionesBuses(String id) throws SQLException {
         List<Localizacion> loc = new ArrayList<>();
         ResultSet rset;
-        String sql = "SELECT * FROM (SELECT * FROM UBICACION WHERE matricula LIKE ? ORDER BY data DESC) WHERE ROWNUM <=5";
+        String sql = "SELECT * FROM (SELECT * FROM localizacion WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
 
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setString(1, id);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            loc.add(new Localizacion(rset.getDouble("altitud"), rset.getDouble("latitud"), rset.getString("fecha"), rset.getString("matricula")));
+            loc.add(new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("FECHA"), rset.getString("MATRICULA")));
         }
         finalizarConexion();
         return loc;
@@ -220,7 +220,7 @@ public class Conexion {
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("matricula"), rset.getString("fecha")));
+            lista.add(new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("MATRICULA"), rset.getString("FECHA")));
         }
         finalizarConexion();
         return lista;

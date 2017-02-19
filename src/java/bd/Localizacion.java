@@ -14,6 +14,10 @@ public class Localizacion {
         this.fecha = fecha;
     }
     
+    public Localizacion(){
+        
+    }
+    
     public String getMatricula() {
         return matricula;
     }
