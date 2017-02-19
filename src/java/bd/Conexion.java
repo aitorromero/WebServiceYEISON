@@ -142,18 +142,18 @@ public class Conexion {
     }
 
     /**
-     * Metodo para obtener las 5 ultimas posiciones de un solo bus. Este metodo
-     * se usara para el mapa.
+     * Metodo para obtener las 5 ultimas posiciones de un solo bus.
      *
      * @param id_bus
      * @return
      * @throws SQLException
      */
+    //ALGO FALLA
     public List<Localizacion> obtenerPosiciones(String id_bus) throws SQLException {
         ResultSet rset;
-        List<Localizacion> lista = new ArrayList();
+        List<Localizacion> lista = new ArrayList<>();
         String sql = "SELECT * FROM (SELECT * FROM Localizacion WHERE matricula = ? ORDER BY fecha DESC) WHERE ROWNUM <=5";
-        
+
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
@@ -198,4 +198,19 @@ public class Conexion {
 
     }
 
+    public List<Localizacion> obtenerUltimasPosiciones() throws SQLException {
+        ResultSet rset;
+        List<Localizacion> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Localizacion WHERE (matricula, fecha) IN (SELECT matricula, MAX(fecha) FROM Localizacion GROUP BY matricula)";
+        
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        rset = stmt.executeQuery();
+        while (rset.next()) {
+            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("matricula"), rset.getString("fecha")));
+        }
+        finalizarConexion();
+        return lista;
+
+    }
+ 
 }
