@@ -20,9 +20,9 @@ public class Bus {
     private String pass;
     private String id_bus;
       
-    public Bus(String pass, String id_bus) {
-        this.pass = pass;
+    public Bus(String id_bus, String pass) {
         this.id_bus = id_bus;
+        this.pass = pass;        
     }
     
     public Bus(){

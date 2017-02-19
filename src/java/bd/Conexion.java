@@ -110,7 +110,7 @@ public class Conexion {
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Bus(rset.getString("matricula"), rset.getString("password")));
+            lista.add(new Bus(rset.getString("id_bus"), rset.getString("pass")));
 
         }
         finalizarConexion();
@@ -126,15 +126,14 @@ public class Conexion {
      */
     public Bus obtenerBusPor(int id_bus) throws SQLException {
         Bus bus = null;
-
         ResultSet rset;
 
-        String sql = "SELECT * FROM Bus WHERE id_bus = ?";
+        String sql = "SELECT * FROM Bus WHERE id_bus LIKE ?";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setInt(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            bus = new Bus(rset.getString("id_bus"), rset.getString("passwd"));
+            bus = new Bus(rset.getString("id_bus"), rset.getString("pass"));
 
         }
         finalizarConexion();
@@ -167,7 +166,7 @@ public class Conexion {
     public List<Localizacion> obtenerTodasPosiciones(String id_bus) throws SQLException {
         ResultSet rset;
         List<Localizacion> lista = new ArrayList();
-        String sql = "SELECT * FROM Localizacion WHERE matricula = ?";
+        String sql = "SELECT * FROM Localizacion WHERE matricula LIKE ?";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
@@ -184,7 +183,7 @@ public class Conexion {
 
         ResultSet rset;
 
-        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE matricula = ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
+        String sql = "SELECT * FROM (SELECT * FROM Posiciones WHERE matricula LIKE ? ORDER BY fecha DESC) WHERE ROWNUM = 1";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setInt(1, id_bus);
         rset = stmt.executeQuery();
