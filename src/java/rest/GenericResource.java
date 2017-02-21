@@ -76,8 +76,6 @@ public class GenericResource {
         return gson.toJson(lista);
     }
 
-    /*ESTE SI*/
- /*IGUAL*/
     /**
      * Metodo para obtener la matricula y contraseña de un bus concreto
      *
@@ -100,9 +98,10 @@ public class GenericResource {
         return gson.toJson(bus);
     }
 
-    /*ESTE SI*//*PREGUNTAR*/
     /**
-     * Metodo para obtener la ultima posicion de un bus
+     * Metodo para obtener la ultima posicion de un bus. Cuando este metodo se
+     * ejecuta nos devuelve la ultima posicion de un bus en cuestion como un 
+     * String Json
      *
      * @param id
      * @return
@@ -124,12 +123,12 @@ public class GenericResource {
     }
 
     /**
-     * Metodo para mostrar las 5 ultimas posiciones de un solo bus
-     *
+     * Metodo para mostrar las 5 ultimas posiciones de un solo bus. Cuando este
+     * metodo se ejecuta nos devuelve una lista con las 5 ultimas localizaciones
+     * de un bus como un Json.
      * @param id
      * @return
      */
-    //ALGO FALLA
     @GET
     @Path("cincoUltimas/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -146,11 +145,13 @@ public class GenericResource {
     }
     
     /**
-     * Metodo para obtener la ultima localizacion de todos los buses
+     * Metodo para obtener la ultima localizacion de todos los buses. Cuando este
+     * metodo se ejecuta nos recupera una lista con la ultima posicion de todos
+     * los buses que pasamos a Json.
      * @return 
      */
     @GET
-    @Path("cincoUltimasPosiciones")
+    @Path("ultimaPosicionTodos")
     @Produces(MediaType.APPLICATION_JSON)
     public String obtenerUltimasLocalizaciones() {
         List<Localizacion> ubi = null;

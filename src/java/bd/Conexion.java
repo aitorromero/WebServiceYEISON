@@ -118,7 +118,10 @@ public class Conexion {
     }
 
     /**
-     * Metodo para obtener un bus a partir de su matricula(id_bus)
+     * Metodo para obtener un bus a partir de su matricula(id_bus).
+     * Se trata de un string con la consulta que le pasamos al objeto PreparedStatment
+     * para asi poder ejecutar la consulta a la conexion que tenemos configurada
+     * en la clase conexio.
      *
      * @param id_bus
      * @return
@@ -143,6 +146,9 @@ public class Conexion {
 
     /**
      * Metodo para obtener todas las posiciones de un bus pasado por parametro
+     * Se trata de un string con la consulta que le pasamos al objeto PreparedStatment
+     * para asi poder ejecutar la consulta a la conexion que tenemos configurada
+     * en la clase conexio.
      * @param id_bus
      * @return
      * @throws SQLException 
@@ -164,6 +170,9 @@ public class Conexion {
 
     /**
      * Metodo para obtener la ultima posicion de un bus pasado por parametro
+     * Se trata de un string con la consulta que le pasamos al objeto PreparedStatment
+     * para asi poder ejecutar la consulta a la conexion que tenemos configurada
+     * en la clase conexio.
      * @param id_bus
      * @return
      * @throws SQLException 
@@ -178,7 +187,7 @@ public class Conexion {
         stmt.setString(1, id_bus);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            loc = new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("FECHA"), rset.getString("MATRICULA"));
+            loc = new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula"));
 
         }
         finalizarConexion();
@@ -188,6 +197,9 @@ public class Conexion {
 
     /**
      * Metodo para obtener las 5 ultimas posiciones de un bus pasado por parametro
+     * Se trata de un string con la consulta que le pasamos al objeto PreparedStatment
+     * para asi poder ejecutar la consulta a la conexion que tenemos configurada
+     * en la clase conexio.
      * @param id
      * @return
      * @throws SQLException 
@@ -201,7 +213,7 @@ public class Conexion {
         stmt.setString(1, id);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            loc.add(new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("FECHA"), rset.getString("MATRICULA")));
+            loc.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula")));
         }
         finalizarConexion();
         return loc;
@@ -209,6 +221,9 @@ public class Conexion {
 
     /**
      * Metodo para obtener la ultima localizacion de todos los buses
+     * Se trata de un string con la consulta que le pasamos al objeto PreparedStatment
+     * para asi poder ejecutar la consulta a la conexion que tenemos configurada
+     * en la clase conexio.
      * @return
      * @throws SQLException 
      */
@@ -220,7 +235,7 @@ public class Conexion {
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         rset = stmt.executeQuery();
         while (rset.next()) {
-            lista.add(new Localizacion(rset.getDouble("LATITUD"), rset.getDouble("ALTITUD"), rset.getString("MATRICULA"), rset.getString("FECHA")));
+            lista.add(new Localizacion(rset.getDouble("latitud"), rset.getDouble("altitud"), rset.getString("fecha"), rset.getString("matricula")));
         }
         finalizarConexion();
         return lista;
