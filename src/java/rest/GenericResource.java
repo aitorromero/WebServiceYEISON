@@ -5,15 +5,6 @@
  */
 package rest;
 
-/*
-    Post insert
-    Put insert-Update
-
-    GET X3  AUTOBUSES
-            TODAS LAS POSICIONES DE UN BUS
-            ULTIMA POSICION DE UN BUS
-    PUT     POSICIONES
- */
 import bd.Bus;
 import bd.Conexion;
 import bd.Localizacion;
@@ -53,9 +44,9 @@ public class GenericResource {
     public GenericResource() {
     }
 
-    /*IGUAL*/
     /**
-     * Metodo para mostrar la matricula y la contraseña de todos los buses
+     * Metodo para mostrar la matricula y la contraseña de todos los buses. El 
+     * resultado de la consulta lo convertimos a Json.
      *
      * @return
      */
@@ -77,7 +68,8 @@ public class GenericResource {
     }
 
     /**
-     * Metodo para obtener la matricula y contraseña de un bus concreto
+     * Metodo para obtener la matricula y contraseña de un bus concreto .El 
+     * resultado de la consulta lo convertimos a Json.
      *
      * @param id
      * @return
@@ -101,7 +93,7 @@ public class GenericResource {
     /**
      * Metodo para obtener la ultima posicion de un bus. Cuando este metodo se
      * ejecuta nos devuelve la ultima posicion de un bus en cuestion como un 
-     * String Json
+     * String que transformamos en Json.
      *
      * @param id
      * @return
@@ -125,7 +117,7 @@ public class GenericResource {
     /**
      * Metodo para mostrar las 5 ultimas posiciones de un solo bus. Cuando este
      * metodo se ejecuta nos devuelve una lista con las 5 ultimas localizaciones
-     * de un bus como un Json.
+     * de un bus que pasaremos a Json.
      * @param id
      * @return
      */

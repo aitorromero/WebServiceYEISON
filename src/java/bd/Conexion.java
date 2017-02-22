@@ -13,20 +13,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
-    Post insert
-    Put insert-Update
-
-    GET X3  AUTOBUSES
-            OBTENER 1 BUS------------(obtenerBusPor)--
-            TODAS LAS POSICIONES DE UN BUS---------(obtenerPosiciones)
-            ULTIMA POSICION DE UN BUS---------(obtenerUltimaPosicion)--
-    PUT     POSICIONES------- (insertarPosicion)
- */
 public class Conexion {
 
     Connection connection;
-
+    /**
+     * Mediante conexion creamos el acceso a la BD que despues usaremos para
+     * ejecutar cada una de las consultas.
+     */
     public Conexion() {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
